@@ -1,0 +1,25 @@
+{
+  "name": "보블 · 가까워지는 이야기",
+  "short_name": "보블",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "ko",
+  "background_color": "#f8faf9",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "assets/bobble-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/bobble-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
