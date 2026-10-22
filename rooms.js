@@ -6,7 +6,16 @@ const isGirib=roomName==='girib',name=isGirib?'한기립':'TPT';
 let run=0,typingEl=null;
 const previous=['오랜만에 연락하는 상대에게 다시 다가가는 법 좀 알려줘.','먼저 연락하라고?','그 정도는 나도 알아.','그래. 생각은 해볼게.','잘 자.'];
 const previousFriedRice=['볶음밥 맛있게 하는 법 좀 알려줘.','굴소스 넣었는데도 맛없어.','더 넣으라고? 이미 많이 넣었는데.','됐어. 다시 해볼게.'];
-const current=isGirib?['행복한 하루 보내.']:['일러!! 기다려주셔요.'];
+const current=isGirib?['행복한 하루 보내.']:[
+ '일러!! 기다려주셔요.',
+ '표음이 생일 일러를 X(트위터)에 업로드했습니다!',
+ '로빈 표음이...ㅎㅎㅎ',
+ '할로윈 날 기립표음 일러도 업로드할게요!',
+ '그리고 제 계정에 서치밴이 걸린 건 아닌가 의심하고 있습니다.',
+ '어제 지인 작가님들과 아무리 찾아봐도 제 계정이 검색되지 않더라고요.........🥲',
+ '일론 머스크......😡 손해배상 청구할 거야.',
+ '그럼 행복한 하루 보내세요!'
+];
 function scroll(){messages.scrollTop=messages.scrollHeight}
 function row(text,mine=false,old=false){
  const follow=messages.scrollHeight-messages.scrollTop-messages.clientHeight<140;
