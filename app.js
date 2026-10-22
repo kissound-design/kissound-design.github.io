@@ -2,7 +2,7 @@
 if(window.parent!==window)document.body.classList.add('embedded');
 const $=s=>document.querySelector(s),messages=$('#messages'),input=$('#reply'),send=$('#send');
 const audio=new Audio('assets/pyoeum-song.mp3');audio.preload='metadata';
-const birthdayAudio=new Audio('assets/pyoeum-happy-birthday.mp3');birthdayAudio.preload='metadata';
+const birthdayAudio=new Audio('assets/pyoeum-birthday-lead-vocals.mp3');birthdayAudio.preload='metadata';
 let birthdayControls=null;
 let waiting=false,waitTimer=null,run=0,startedSong=false,finished=false,playButton,seek,duration,status;
 let pendingReply=null,replySerial=0,typingEl=null;
@@ -104,12 +104,12 @@ function updateBirthdayAudio(){
  if(!c||!c.play.isConnected)return;
  const d=birthdayAudio.duration;
  c.track.value=Number.isFinite(d)&&d>0?birthdayAudio.currentTime/d*100:0;
- c.clock.textContent=fmt(birthdayAudio.currentTime)+' / '+fmt(Number.isFinite(d)?d:14);
+ c.clock.textContent=fmt(birthdayAudio.currentTime)+' / '+fmt(Number.isFinite(d)?d:7.34);
 }
 function addBirthdaySong(){
  const r=row('');
  r.bubble.classList.add('song');
- r.bubble.innerHTML='<div class="song-label">VOICE MESSAGE</div><div class="player"><button class="play" type="button" aria-label="생일 노래 재생">▶</button><button class="loop" type="button" aria-label="반복 재생" aria-pressed="false">↻</button><input class="track" type="range" min="0" max="100" value="0" step="0.1" aria-label="생일 노래 재생 위치"></div><div class="duration">0:00 / 0:14</div><div class="song-status">Happy Birthday to Me~</div>';
+ r.bubble.innerHTML='<div class="song-label">VOICE MESSAGE</div><div class="player"><button class="play" type="button" aria-label="생일 노래 재생">▶</button><button class="loop" type="button" aria-label="반복 재생" aria-pressed="false">↻</button><input class="track" type="range" min="0" max="100" value="0" step="0.1" aria-label="생일 노래 재생 위치"></div><div class="duration">0:00 / 0:07</div><div class="song-status">Happy Birthday to Me~</div>';
  const bubble=r.bubble;
  birthdayControls={
   play:bubble.querySelector('.play'),
