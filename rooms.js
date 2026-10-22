@@ -5,7 +5,7 @@ const roomName=document.querySelector('script[data-room]').dataset.room;
 const isGirib=roomName==='girib',name=isGirib?'한기립':'TPT';
 let run=0,typingEl=null;
 const previous=['오랜만에 연락하는 상대에게 다시 다가가는 법 좀 알려줘.','먼저 연락하라고?','그 정도는 나도 알아.','그래. 생각은 해볼게.','잘 자.'];
-const current=isGirib?['볶음밥 맛있게 하는 법 좀 알려줘.','굴소스 넣었는데도 맛없어.','더 넣으라고? 이미 많이 넣었는데.','됐어. 다시 해볼게.']:['독자님들 감사합니다. 항상 정진하겠습니다.'];
+const current=isGirib?['행복한 하루 보내.','볶음밥 맛있게 하는 법 좀 알려줘.','굴소스 넣었는데도 맛없어.','더 넣으라고? 이미 많이 넣었는데.','됐어. 다시 해볼게.']:['일러!! 기다려주셔요.'];
 function scroll(){messages.scrollTop=messages.scrollHeight}
 function row(text,mine=false,old=false){
  const follow=messages.scrollHeight-messages.scrollTop-messages.clientHeight<140;
