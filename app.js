@@ -5,6 +5,7 @@ const audio=new Audio('assets/pyoeum-song.mp3');audio.preload='metadata';
 let waiting=false,waitTimer=null,run=0,startedSong=false,finished=false,playButton,seek,duration,status;
 let pendingReply=null,replySerial=0,typingEl=null;
 const groups=[
+ ['오늘 생일 축하해줘서 정말 고마워!'],
  ['이제 퇴근~ 영어로 녹화하면 신경을 두 배로 써서 그런가, 진짜 배고프다 ㅎㅎ'],
  ['오늘 거 언제 나오냐고? 날짜 나오면 알려줄게. 오늘 방송에서 손을 엄청 바쁘게 움직였어 ㅎㅎ', '말로 다 안 되니까 손이라도 거들어야지.'],
  ['밥 먹었어? 난 집에 가서 볶음밥 먹으려고. 오는 길에 계속 그 생각 했어.', '직접 만드냐고? ㅎㅎ 나는 먹는 쪽으로 꾸준히 실력을 쌓고 있지.']
