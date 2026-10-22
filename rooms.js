@@ -5,7 +5,8 @@ const roomName=document.querySelector('script[data-room]').dataset.room;
 const isGirib=roomName==='girib',name=isGirib?'한기립':'TPT';
 let run=0,typingEl=null;
 const previous=['오랜만에 연락하는 상대에게 다시 다가가는 법 좀 알려줘.','먼저 연락하라고?','그 정도는 나도 알아.','그래. 생각은 해볼게.','잘 자.'];
-const current=isGirib?['행복한 하루 보내.','볶음밥 맛있게 하는 법 좀 알려줘.','굴소스 넣었는데도 맛없어.','더 넣으라고? 이미 많이 넣었는데.','됐어. 다시 해볼게.']:['일러!! 기다려주셔요.'];
+const previousFriedRice=['볶음밥 맛있게 하는 법 좀 알려줘.','굴소스 넣었는데도 맛없어.','더 넣으라고? 이미 많이 넣었는데.','됐어. 다시 해볼게.'];
+const current=isGirib?['행복한 하루 보내.']:['일러!! 기다려주셔요.'];
 function scroll(){messages.scrollTop=messages.scrollHeight}
 function row(text,mine=false,old=false){
  const follow=messages.scrollHeight-messages.scrollTop-messages.clientHeight<140;
@@ -21,7 +22,7 @@ function showTyping(){if(typingEl?.isConnected)return;typingEl=row('');typingEl.
 function hideTyping(){typingEl?.remove();typingEl=null}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function start(){const token=run;for(let i=0;i<current.length;i++){showTyping();await sleep(i===0?1500:[0,7000,8000,6500][i]||5000);if(token!==run)return;hideTyping();row(current[i])}$('#hint').textContent='';}
-function renderHistory(){if(!isGirib)return;const date=document.createElement('div');date.className='date history-heading';date.textContent='6월 6일';messages.insertBefore(date,$('#date'));for(const text of previous){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}}
+function renderHistory(){if(!isGirib)return;const date=document.createElement('div');date.className='date history-heading';date.textContent='6월 6일';messages.insertBefore(date,$('#date'));for(const text of previous){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}const oldDate=document.createElement('div');oldDate.className='date history-heading';oldDate.textContent='이전 보블';messages.insertBefore(oldDate,$('#date'));for(const text of previousFriedRice){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}}
 $('#date').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
 $('#composer').addEventListener('submit',e=>{e.preventDefault();const text=input.value.trim();if(!text)return;row(text,true);input.value='';input.style.height='';send.disabled=true});
 input.addEventListener('input',()=>{send.disabled=!input.value.trim();input.style.height='auto';input.style.height=Math.min(input.scrollHeight,92)+'px'});
