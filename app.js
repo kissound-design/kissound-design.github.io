@@ -2,6 +2,8 @@
 if(window.parent!==window)document.body.classList.add('embedded');
 const $=s=>document.querySelector(s),messages=$('#messages'),input=$('#reply'),send=$('#send');
 const audio=new Audio('assets/pyoeum-song.mp3');audio.preload='metadata';
+const birthdayAudio=new Audio('assets/pyoeum-happy-birthday.mp3');birthdayAudio.preload='metadata';
+let birthdayControls=null;
 let waiting=false,waitTimer=null,run=0,startedSong=false,finished=false,playButton,seek,duration,status;
 let pendingReply=null,replySerial=0,typingEl=null;
 const groups=[
@@ -87,6 +89,7 @@ async function advance(){
  const token=run;
  if(!await say(birthdayMessage,token,true))return;
  hideTyping();
+ addBirthdaySong();
  finished=true;
  $('#hint').textContent='표음에게 답장을 보내보세요';
  scroll();
@@ -95,6 +98,70 @@ $('#composer').addEventListener('submit',e=>{e.preventDefault();const text=input
 input.addEventListener('input',()=>{send.disabled=!input.value.trim();input.style.height='auto';input.style.height=Math.min(input.scrollHeight,92)+'px'});
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('#composer').requestSubmit()}});
 function fmt(t){if(!Number.isFinite(t))return '0:00';return Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0')}
+
+function updateBirthdayAudio(){
+ const c=birthdayControls;
+ if(!c||!c.play.isConnected)return;
+ const d=birthdayAudio.duration;
+ c.track.value=Number.isFinite(d)&&d>0?birthdayAudio.currentTime/d*100:0;
+ c.clock.textContent=fmt(birthdayAudio.currentTime)+' / '+fmt(Number.isFinite(d)?d:14);
+}
+function addBirthdaySong(){
+ const r=row('');
+ r.bubble.classList.add('song');
+ r.bubble.innerHTML='<div class="song-label">VOICE MESSAGE</div><div class="player"><button class="play" type="button" aria-label="생일 노래 재생">▶</button><button class="loop" type="button" aria-label="반복 재생" aria-pressed="false">↻</button><input class="track" type="range" min="0" max="100" value="0" step="0.1" aria-label="생일 노래 재생 위치"></div><div class="duration">0:00 / 0:14</div><div class="song-status">Happy Birthday to Me~</div>';
+ const bubble=r.bubble;
+ birthdayControls={
+  play:bubble.querySelector('.play'),
+  loop:bubble.querySelector('.loop'),
+  track:bubble.querySelector('.track'),
+  clock:bubble.querySelector('.duration'),
+  status:bubble.querySelector('.song-status')
+ };
+ const c=birthdayControls;
+ birthdayAudio.loop=false;
+ c.play.onclick=()=>{
+  if(birthdayAudio.paused)birthdayAudio.play().catch(()=>{c.status.textContent='재생하지 못했어요. 다시 눌러주세요.'});
+  else birthdayAudio.pause();
+ };
+ c.loop.onclick=()=>{
+  birthdayAudio.loop=!birthdayAudio.loop;
+  c.loop.setAttribute('aria-pressed',String(birthdayAudio.loop));
+  c.loop.setAttribute('aria-label',birthdayAudio.loop?'반복 재생 끄기':'반복 재생 켜기');
+ };
+ c.track.oninput=()=>{
+  if(Number.isFinite(birthdayAudio.duration))birthdayAudio.currentTime=Number(c.track.value)/100*birthdayAudio.duration;
+ };
+ updateBirthdayAudio();
+ scroll();
+}
+birthdayAudio.addEventListener('loadedmetadata',updateBirthdayAudio);
+birthdayAudio.addEventListener('timeupdate',updateBirthdayAudio);
+birthdayAudio.addEventListener('play',()=>{
+ audio.pause();
+ const c=birthdayControls;
+ if(!c||!c.play.isConnected)return;
+ c.play.textContent='Ⅱ';
+ c.play.setAttribute('aria-label','생일 노래 일시정지');
+ c.status.textContent='Happy Birthday to Me~ · 재생 중';
+});
+birthdayAudio.addEventListener('pause',()=>{
+ const c=birthdayControls;
+ if(!c||!c.play.isConnected)return;
+ c.play.textContent='▶';
+ c.play.setAttribute('aria-label','생일 노래 재생');
+ c.status.textContent=birthdayAudio.ended?'다시 들어도 좋아요':'Happy Birthday to Me~';
+});
+birthdayAudio.addEventListener('ended',()=>{
+ const c=birthdayControls;
+ if(c&&c.play.isConnected)c.status.textContent='다시 들어도 좋아요';
+});
+birthdayAudio.addEventListener('error',()=>{
+ const c=birthdayControls;
+ if(c&&c.play.isConnected)c.status.textContent='음성을 불러오지 못했어요. 새로고침해 주세요.';
+});
+audio.addEventListener('play',()=>birthdayAudio.pause());
+
 function addSong(historic=false){const r=row('');if(historic){r.el.classList.add('history');r.stamp.remove();messages.insertBefore(r.el,$('#date'));}r.bubble.classList.add('song');r.bubble.innerHTML='<div class="song-label">VOICE MESSAGE</div><div class="player"><button class="play" aria-label="노래 재생">▶</button><button class="loop" type="button" aria-label="반복 재생" aria-pressed="false">↻</button><input class="track" type="range" min="0" max="100" value="0" step="0.1" aria-label="노래 재생 위치"></div><div class="duration">0:00 / '+fmt(audio.duration)+'</div><div class="song-status">표음이 보낸 음성 메시지</div>';playButton=r.bubble.querySelector('.play');seek=r.bubble.querySelector('.track');duration=r.bubble.querySelector('.duration');status=r.bubble.querySelector('.song-status');const loopButton=r.bubble.querySelector('.loop');audio.loop=false;loopButton.onclick=()=>{audio.loop=!audio.loop;loopButton.setAttribute('aria-pressed',String(audio.loop));loopButton.setAttribute('aria-label',audio.loop?'반복 재생 끄기':'반복 재생 켜기')};playButton.onclick=()=>{if(audio.paused)audio.play().catch(()=>status.textContent='재생하지 못했어요. 다시 눌러주세요.');else audio.pause()};seek.oninput=()=>{if(Number.isFinite(audio.duration))audio.currentTime=Number(seek.value)/100*audio.duration};scroll()}
 audio.addEventListener('play',()=>{if(playButton){playButton.textContent='Ⅱ';playButton.setAttribute('aria-label','노래 일시정지');status.textContent='표음이 노래하고 있어요'}});
 audio.addEventListener('pause',()=>{if(playButton){playButton.textContent='▶';playButton.setAttribute('aria-label','노래 재생');status.textContent=audio.ended?'다시 들어도 좋아요':'잠시 멈춤'}});
@@ -103,11 +170,13 @@ audio.addEventListener('error',()=>{if(status)status.textContent='음성을 불�
 $('#menu').onclick=()=>{$('#panel').hidden=!$('#panel').hidden};$('#info').onclick=()=>{if(window.parent!==window)window.parent.postMessage({type:'bobble-home'},window.location.origin);else window.location.href='/'};$('#close').onclick=()=>$('#panel').hidden=true;
 $('#restart').onclick=()=>{
  hideTyping();run++;if(pendingReply)pendingReply.cancel();clearTimeout(waitTimer);
- audio.pause();audio.loop=false;audio.currentTime=0;waiting=false;startedSong=false;finished=false;
+ audio.pause();audio.loop=false;audio.currentTime=0;
+ birthdayAudio.pause();birthdayAudio.loop=false;birthdayAudio.currentTime=0;birthdayControls=null;
+ waiting=false;startedSong=false;finished=false;
  messages.querySelectorAll('.row:not(.history),.end:not(.history)').forEach(x=>x.remove());
  $('#panel').hidden=true;$('#hint').textContent='표음에게 답장을 보내보세요';advance();
 };
 let firstDay;try{firstDay=localStorage.getItem('pyoeum-first-day');if(!firstDay){firstDay=new Date().toISOString();localStorage.setItem('pyoeum-first-day',firstDay)}}catch{}const dayCount=firstDay?Math.max(1,Math.floor((Date.now()-new Date(firstDay).getTime())/86400000)+1):1;$('#days').textContent='+'+dayCount;
 $('#date').textContent='2026년 10월 22일 목요일';renderHistory();Promise.race([Promise.all(Array.from(messages.querySelectorAll('img')).map(img=>img.decode().catch(()=>{}))),sleep(2500)]).then(()=>{scroll();advance()});
 
-window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===window.parent&&e.data?.type==='bobble-pause')audio.pause()});
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.source===window.parent&&e.data?.type==='bobble-pause'){audio.pause();birthdayAudio.pause()}});
