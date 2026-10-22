@@ -9,7 +9,7 @@ const previousFriedRice=['볶음밥 맛있게 하는 법 좀 알려줘.','굴소
 const current=isGirib?['행복한 하루 보내.']:[
  '일러!! 기다려주셔요.',
  '표음이 생일 일러를 X(트위터)에 업로드했습니다!',
- {image:'assets/pyoeum-robin-birthday.webp',alt:'로빈으로 변신한 표음의 생일 일러스트'},
+ {image:'assets/pyoeum-robin-birthday.webp?v=2',alt:'로빈으로 변신한 표음의 생일 일러스트'},
  '로빈 표음이...ㅎㅎㅎ',
  '할로윈 날 기립표음 일러도 업로드할게요!',
  '그리고 제 계정에 서치밴이 걸린 건 아닌가 의심하고 있습니다.',
@@ -24,7 +24,7 @@ function row(text,mine=false,old=false){
  if(!mine){const avatar=document.createElement('div');avatar.className='avatar';if(isGirib){const img=document.createElement('img');img.src='assets/girib-profile.png';img.alt='한기립 프로필';avatar.append(img)}else{avatar.classList.add('tpt-avatar');avatar.textContent='tpt'}el.append(avatar)}
  const body=document.createElement('div');body.className='body';
  if(!mine){const label=document.createElement('div');label.className='name';if(isGirib){const badge=document.createElement('span');badge.className='artist-badge';badge.textContent='ARTIST';label.append(badge)}const strong=document.createElement('strong');strong.textContent=name;label.append(strong);body.append(label)}
- const line=document.createElement('div');line.className='line';const bubble=document.createElement('div');bubble.className='bubble';if(text&&typeof text==='object'&&text.image){bubble.classList.add('photo-bubble');const button=document.createElement('button');button.className='photo-open';button.type='button';button.setAttribute('aria-label',(text.alt||'일러스트')+' 크게 보기');const img=document.createElement('img');img.src=text.image;img.alt=text.alt||'일러스트';img.width=720;img.height=480;button.append(img);button.onclick=()=>{const viewer=$('#photo-viewer'),full=$('#photo-full');if(!viewer||!full)return;full.src=img.src;full.alt=img.alt;viewer.showModal()};bubble.append(button)}else bubble.textContent=text;line.append(bubble);
+ const line=document.createElement('div');line.className='line';const bubble=document.createElement('div');bubble.className='bubble';if(text&&typeof text==='object'&&text.image){bubble.classList.add('photo-bubble');const button=document.createElement('button');button.className='photo-open';button.type='button';button.setAttribute('aria-label',(text.alt||'일러스트')+' 크게 보기');const img=document.createElement('img');img.src=text.image;img.alt=text.alt||'일러스트';img.width=2048;img.height=1365;button.append(img);button.onclick=()=>{const viewer=$('#photo-viewer'),full=$('#photo-full');if(!viewer||!full)return;full.src=img.src;full.alt=img.alt;viewer.showModal()};bubble.append(button)}else bubble.textContent=text;line.append(bubble);
  if(!old){const stamp=document.createElement('div');stamp.className='time';stamp.textContent=new Date().toLocaleTimeString('ko-KR',{hour:'numeric',minute:'2-digit',hour12:true});line.append(stamp)}
  body.append(line);el.append(body);if(mine&&typingEl?.isConnected)messages.insertBefore(el,typingEl);else messages.append(el);if(follow)scroll();return el;
 }
