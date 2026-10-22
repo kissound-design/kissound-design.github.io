@@ -22,8 +22,8 @@ function showTyping(){if(typingEl?.isConnected)return;typingEl=row('');typingEl.
 function hideTyping(){typingEl?.remove();typingEl=null}
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function start(){const token=run;for(let i=0;i<current.length;i++){showTyping();await sleep(i===0?1500:[0,7000,8000,6500][i]||5000);if(token!==run)return;hideTyping();row(current[i])}$('#hint').textContent='';}
-function renderHistory(){if(!isGirib)return;const date=document.createElement('div');date.className='date history-heading';date.textContent='6월 6일';messages.insertBefore(date,$('#date'));for(const text of previous){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}const oldDate=document.createElement('div');oldDate.className='date history-heading';oldDate.textContent='이전 보블';messages.insertBefore(oldDate,$('#date'));for(const text of previousFriedRice){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}}
-$('#date').textContent=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+function renderHistory(){if(!isGirib)return;const date=document.createElement('div');date.className='date history-heading';date.textContent='6월 6일';messages.insertBefore(date,$('#date'));for(const text of previous){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}const oldDate=document.createElement('div');oldDate.className='date history-heading';oldDate.textContent='2026년 10월 17일 토요일';messages.insertBefore(oldDate,$('#date'));for(const text of previousFriedRice){const el=row(text,false,true);messages.insertBefore(el,$('#date'))}}
+$('#date').textContent='2026년 10월 22일 목요일';
 $('#composer').addEventListener('submit',e=>{e.preventDefault();const text=input.value.trim();if(!text)return;row(text,true);input.value='';input.style.height='';send.disabled=true});
 input.addEventListener('input',()=>{send.disabled=!input.value.trim();input.style.height='auto';input.style.height=Math.min(input.scrollHeight,92)+'px'});
 input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();$('#composer').requestSubmit()}});
